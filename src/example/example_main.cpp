@@ -12,8 +12,6 @@ static void getRTMatrixSVD( const CvPoint2D32f* a, const CvPoint2D32f* b, int co
 	CvMat u = cvMat(2,2,CV_32F,U);
 	CvMat w = cvMat(2,2,CV_32F,W);
 	CvMat v = cvMat(2,2,CV_32F,V);
-	CvMat r = cvMat(2,2,CV_32F,W);
-	CvMat t = cvMat(2,1,CV_32F,V);
 	CvPoint2D32f mean_a = cvPoint2D32f(0.f,0.f);
 	CvPoint2D32f mean_b = cvPoint2D32f(0.f,0.f);
 	for( i = 0 ; i < count ; i ++) {
@@ -62,9 +60,9 @@ static double dist_sq( double *a1, double *a2, int dims ) {
 int main_icp() {
 	int i, num_pts ;
 	void *ptree;
-	char *data, *pch;
+	char *pch;
 	struct kdres *presults;
-	double pos[3], dist;
+	double pos[3];
 	std::vector<CvPoint2D32f> pt0;
 	std::vector<CvPoint2D32f> pt1;
 	IplImage * image_base ;
@@ -99,14 +97,13 @@ int main_icp() {
 	}
 	for(;;) {
 		cvCopy(image_base,image);
-		int k = 0;
 		double err = 0.;
 		pt0.clear();
 		for( i = 0 ; i < pt1.size() ; i++) {
 			double pt[3] = {  pt1[i].x,  pt1[i].y , 0 };
 			cvDrawCircle(image,cvPoint((int)pt[0],(int)pt[1]),3,CV_RGB(0,255,0),1);
 			presults =  kd_nearest( (kdtree *)ptree, pt);
-			printf("%d\n",presults);
+			//printf("%d\n",presults);
 			kd_res_end( presults );
 			pch = (char*)kd_res_item( presults, pos );
 			err += sqrt( dist_sq( pt, pos, 3 ) );
@@ -141,7 +138,7 @@ int main_icp() {
 }
 
 
-void main() {
+int main(int,char **) {
 	main_icp();
 }
 
