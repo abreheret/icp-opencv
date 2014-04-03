@@ -1,3 +1,3 @@
 
-add_executable(example_main example_main.c)
-target_link_libraries(example_main lib_icp_opencv) 
+add_executable(example_main example_main.cpp)
+target_link_libraries(example_main kdtree ${OpenCV_LIBS}) 
