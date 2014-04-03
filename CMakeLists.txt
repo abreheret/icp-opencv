@@ -7,4 +7,5 @@ if(WIN32)
 endif(WIN32)
 
 find_package(OpenCV REQUIRED)
+include_directories( ${OPENCV_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} )
 add_subdirectory(src)
