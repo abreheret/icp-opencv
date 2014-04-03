@@ -74,7 +74,6 @@ int main_icp() {
 	image = cvCreateImage(cvSize(500,500),8,3);
 	cvZero(image_base);
 	CvMat *   h = cvCreateMat(2,3, CV_64F);
-	/* add some random nodes to the tree (assert nodes are successfully inserted) */
 	ptree = kd_create( 3 );
 	double norm = 200;
 	double a = 0.;
