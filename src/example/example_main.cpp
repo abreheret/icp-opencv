@@ -36,7 +36,7 @@ static void getRTMatrixSVD( const CvPoint2D32f* a, const CvPoint2D32f* b, int co
 		H[3] += AY*BY;
 	}
 	cvSVD(&h,&w,&u,&v,CV_SVD_MODIFY_A);
-	// R = V * traspose(U)
+	// R = V * transpose(U)
 	R[0] = V[0]*U[0] + V[1]*U[1];
 	R[1] = V[0]*U[2] + V[1]*U[3];
 	R[2] = V[2]*U[0] + V[3]*U[1];
