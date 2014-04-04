@@ -82,7 +82,7 @@ int main_icp() {
 		float y = xx * -sin(CV_PI/4) + yy *cos(CV_PI/4)+250;
 		pt0.push_back(cvPoint2D32f(x,y));
 		cvDrawCircle(image_base,cvPoint((int)x,(int)y),1,CV_RGB(0,255,255),1);
-		assert( 0 == kd_insert3f((kdtree*) ptree, x, y, 0., 0) );
+		kd_insert3f((kdtree*) ptree, x, y, 0., 0);
 		a += 2*CV_PI/(float)(num_pts);
 	}
 	a = 0.;
