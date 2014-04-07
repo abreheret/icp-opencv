@@ -3,7 +3,7 @@
 
 int main(int,char **) {
 	int i, num_pts ;
-	std::vector<CvPoint2D32f> old_points;
+	std::vector<CvPoint2D32f> ref_points;
 	std::vector<CvPoint2D32f> new_points;
 	IplImage * image_base ;
 	IplImage * image ;
@@ -11,7 +11,6 @@ int main(int,char **) {
 	image_base = cvCreateImage(cvSize(500,500),8,3);
 	image = cvCreateImage(cvSize(500,500),8,3);
 	cvZero(image_base);
-	CvMat *   h = cvCreateMat(2,3, CV_64F);
 	double norm = 200;
 	float a = 0.;
 	for( i=0; i<num_pts; i++ ) {
@@ -19,7 +18,7 @@ int main(int,char **) {
 		float yy = (float)(norm)*sin(a);
 		float x = (float)(xx * cos(CV_PI/4) + yy *sin(CV_PI/4) +250);
 		float y = (float)(xx * -sin(CV_PI/4) + yy *cos(CV_PI/4)+250);
-		old_points.push_back(cvPoint2D32f(x,y));
+		ref_points.push_back(cvPoint2D32f(x,y));
 		cvDrawCircle(image_base,cvPoint((int)x,(int)y),1,CV_RGB(0,255,255),1);
 		a += (float)(2*CV_PI/num_pts);
 	}
@@ -33,17 +32,16 @@ int main(int,char **) {
 		a += (float)(2*CV_PI/(float)(num_pts/5));
 		cvDrawCircle(image_base,cvPoint((int)x,(int)y),1,CV_RGB(255,255,0),1);
 	}
-	
+
 	for(;;) {
-		float R[4] = {1.f,0.f,0.f,1.f},T[2] = {0.,0.};
-		CvMat r = cvMat(2,2,CV_32F,R);
-		CvMat t = cvMat(2,1,CV_32F,T);
+        float R[4] = {1.f,0.f,0.f,1.f},T[2] = {0.,0.};
+        CvMat r = cvMat(2,2,CV_32F,R);
+        CvMat t = cvMat(2,1,CV_32F,T);
 		cvCopy(image_base,image);
-
-		float err = icp(&new_points[0],new_points.size(),&old_points[0],old_points.size(),
-			cvTermCriteria(CV_TERMCRIT_ITER,1,1),&r,&t,image);
+		float err = icp(&new_points[0],new_points.size(),
+                        &ref_points[0],ref_points.size(),
+                        &r,&t,cvTermCriteria(CV_TERMCRIT_ITER,1,0.1),image);
 		printf("err = %f\n",err);
-
 		for(int i = 0; i < (int)new_points.size() ; i++ ) {
 			float x = new_points[i].x;
 			float y = new_points[i].y;
@@ -53,10 +51,14 @@ int main(int,char **) {
 			new_points[i].y = Y;
 			cvDrawCircle(image,cvPoint((int)X,(int)Y),5,CV_RGB(255,255,0),1);
 		}
+        printf("Final transformation : \n");
+        printf("R[0]=%f R[1]=%f T[0]=%f\n",R[0],R[1],T[0]);
+        printf("R[2]=%f R[3]=%f T[1]=%f\n",R[2],R[3],T[1]);
 		cvShowImage("image",image);
 		if( cvWaitKey(0)== 27) break;
 	}
-	cvReleaseImage(&image_base);
+	
+    cvReleaseImage(&image_base);
 	cvReleaseImage(&image);
 	return 0;
 }

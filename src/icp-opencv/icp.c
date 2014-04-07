@@ -60,33 +60,36 @@ static float dist_sq( float *a1, float*a2, int dims ) {
 	return dist_sq;
 }
 
-float icp(const CvPoint2D32f* new_pt,int nb_point_new_pt, const CvPoint2D32f* old_pt,int nb_point_old_pt,
-	      CvTermCriteria criteria, CvMat * r_final,CvMat *t_final,IplImage * image) { 
+float icp(const CvPoint2D32f* new_points,int nb_point_new,
+          const CvPoint2D32f* ref_points,int nb_point_ref,
+          CvMat * r_final,CvMat *t_final,
+	      CvTermCriteria criteria,IplImage * image) {
 	int k,i;
 	float prev_err = (float)9e33;
 	float err;
 	struct kdres *presults;
 	struct kdtree *ptree = kd_create( 2 );
-	CvPoint2D32f * input_correlation_old = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new_pt );
-	CvPoint2D32f * input_correlation_new = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new_pt );
-	
+	CvPoint2D32f * input_correlation_old = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new );
+	CvPoint2D32f * input_correlation_new = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new );
+    
 	r_final->data.fl[0] = 1.f; r_final->data.fl[1] = 0.f;
 	r_final->data.fl[2] = 0.f; r_final->data.fl[3] = 1.f;
 	t_final->data.fl[0] = 0.f;
  	t_final->data.fl[1] = 0.f;
 
-	for( i = 0; i < nb_point_old_pt; i++ ) 
-		kd_insertf((struct kdtree*) ptree, (float*)&old_pt[i], 0);
+	for( i = 0; i < nb_point_ref; i++ ) 
+		kd_insertf((struct kdtree*) ptree, (float*)&ref_points[i], 0);
 
-	for( i = 0; i < nb_point_new_pt; i++ ) 
-		input_correlation_new[i] = new_pt[i];
+	for( i = 0; i < nb_point_new; i++ )
+		input_correlation_new[i] = new_points[i];
 
 	for ( k = 0 ; k < criteria.max_iter; k++ ) {
-		float R[4],T[2];
-		CvMat r = cvMat(2,2,CV_32F,R);
-		CvMat t = cvMat(2,1,CV_32F,T);
+        float R[4],T[2];
+        CvMat r = cvMat(2,2,CV_32F,R);
+        CvMat t = cvMat(2,1,CV_32F,T);
+
 		err = 0.;
-		for( i = 0 ; i < nb_point_new_pt ; i++) {
+		for( i = 0 ; i < nb_point_new ; i++) {
 			presults = kd_nearestf( (struct kdtree *)ptree, (float*)&input_correlation_new[i]);
 			kd_res_end( presults );
 			kd_res_itemf( presults, (float*)&input_correlation_old[i] );
@@ -98,12 +101,8 @@ float icp(const CvPoint2D32f* new_pt,int nb_point_new_pt, const CvPoint2D32f* ol
 				cvDrawCircle(image,cvPoint((int)input_correlation_old[i].x,(int)input_correlation_old[i].y),3,CV_RGB(255,0,0),1,8,0);
 			}
 		}
-		getRTMatrixSVD(&input_correlation_new[0],&input_correlation_old[0],nb_point_new_pt,&r,&t);
-		cvMatMul(&r,r_final,r_final);
- 		t_final->data.fl[0] += T[0];
- 		t_final->data.fl[1] += T[1];
-		
-		for(i = 0; i < nb_point_new_pt ; i++ ) {
+		getRTMatrixSVD(&input_correlation_new[0],&input_correlation_old[0],nb_point_new,&r,&t);
+		for(i = 0; i < nb_point_new ; i++ ) {
 			float x = input_correlation_new[i].x;
 			float y = input_correlation_new[i].y;
 			float X = (R[0]*x + R[1]*y + T[0]);
@@ -113,7 +112,8 @@ float icp(const CvPoint2D32f* new_pt,int nb_point_new_pt, const CvPoint2D32f* ol
 		}
 		if ( fabs(err - prev_err) < criteria.epsilon )  break;
 		else prev_err = err;
-	}
+    }
+    getRTMatrixSVD(&new_points[0],&input_correlation_new[0],nb_point_new,r_final,t_final);
 	kd_res_free( presults );
 	kd_free( ptree );
 	free(input_correlation_old);
