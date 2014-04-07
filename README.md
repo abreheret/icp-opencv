@@ -8,7 +8,4 @@ A simple example of icp (Iterative Closest Point) with [opencv](http://opencv.or
 " target="_blank"><img src="image.png" 
 alt="IMAGE ALT TEXT HERE" width="500" height="500" border="10" /></a>
 
-TODO :
-======
 
-* Factorize the icp function example_main, for create lib.
