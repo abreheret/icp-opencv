@@ -14,7 +14,6 @@ int main(int,char **) {
 	CvMat *   h = cvCreateMat(2,3, CV_64F);
 	double norm = 200;
 	float a = 0.;
-	//cvNamedWindow("image",CV_WINDOW_AUTOSIZE);
 	for( i=0; i<num_pts; i++ ) {
 		float xx = (float)(norm/2.f)*cos(a);
 		float yy = (float)(norm)*sin(a);
@@ -43,7 +42,7 @@ int main(int,char **) {
 
 		float err = icp(&new_points[0],new_points.size(),&old_points[0],old_points.size(),
 			cvTermCriteria(CV_TERMCRIT_ITER,1,1),&r,&t,image);
-		printf("err = %f\n",err,R[0],R[1],T[0],R[2],R[3],T[1]);
+		printf("err = %f\n",err);
 
 		for(int i = 0; i < (int)new_points.size() ; i++ ) {
 			float x = new_points[i].x;
@@ -52,7 +51,7 @@ int main(int,char **) {
 			float Y = (R[2]*x + R[3]*y + T[1]);
 			new_points[i].x = X;
 			new_points[i].y = Y;
-		//	cvDrawCircle(image,cvPoint((int)X,(int)Y),5,CV_RGB(255,255,0),1);
+			cvDrawCircle(image,cvPoint((int)X,(int)Y),5,CV_RGB(255,255,0),1);
 		}
 		cvShowImage("image",image);
 		if( cvWaitKey(0)== 27) break;
