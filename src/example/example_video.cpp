@@ -33,7 +33,7 @@ int main(int,char **) {
 		cvDrawCircle(image_base,cvPoint((int)x,(int)y),1,CV_RGB(255,255,0),1);
 	}
 
-	for(;;) {
+	for(int k = 0; k < 30 ;k++) {
         float R[4] = {1.f,0.f,0.f,1.f},T[2] = {0.,0.};
         CvMat r = cvMat(2,2,CV_32F,R);
         CvMat t = cvMat(2,1,CV_32F,T);
@@ -55,7 +55,7 @@ int main(int,char **) {
         printf("R[0]=%f R[1]=%f T[0]=%f\n",R[0],R[1],T[0]);
         printf("R[2]=%f R[3]=%f T[1]=%f\n",R[2],R[3],T[1]);
 		cvShowImage("image",image);
-		if( cvWaitKey(0)== 27) break;
+		if( cvWaitKey(200)== 27) break;
 	}
 	
     cvReleaseImage(&image_base);
