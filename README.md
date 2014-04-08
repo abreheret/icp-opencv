@@ -9,10 +9,14 @@ A simple example of icp (Iterative Closest Point) with [opencv](http://opencv.or
 alt="IMAGE ALT TEXT HERE" width="500" height="500" border="10" /></a>
 
 
-Install Windows (Visualstudio)
+
+
+Install 
 =========
 
 Generate the project with [cmake](http://www.cmake.org/) :
+
+### Windows (Visualstudio)  
 
 Example for visual 2008 in console in directory project :
  
@@ -22,13 +26,12 @@ Example for visual 2008 in console in directory project :
 
 Or launch the bat file `create_project_studio2010.bat` for visual studio 2010
 
-Install MacOS (Xcode)
-=========
+### MacOS (Xcode)
+
 
 launch the shell file `create_project_xcode.sh`, verify that the file is executable else : `> chmod 755 create_project_xcode.sh`.
 
-Install Linux (Makefiles)
-=========
+### Linux (Makefiles)
 
       > mkdir makeproject
       > cd makeproject
