@@ -1,17 +1,14 @@
 #include "icp.h"
-
+// return the rigid transformation (rotation and tranlation matrix), for more inforation see http://nghiaho.com/?page_id=671
 static void getRTMatrixSVD( const CvPoint2D32f* a, const CvPoint2D32f* b, int count ,CvMat *r,CvMat *t) {
 	int i;
-	float H[4] = {0.f,0.f,0.f,0.f};
-	float U[4] = {0.f,0.f,0.f,0.f};
-	float W[4] = {0.f,0.f,0.f,0.f};
-	float V[4] = {0.f,0.f,0.f,0.f};
-	CvMat h = cvMat(2,2,CV_32F,H);
-	CvMat u = cvMat(2,2,CV_32F,U);
-	CvMat w = cvMat(2,2,CV_32F,W);
-	CvMat v = cvMat(2,2,CV_32F,V);
+	float H[4] = {0.f,0.f,0.f,0.f}; CvMat h = cvMat(2,2,CV_32F,H);
+	float U[4] = {0.f,0.f,0.f,0.f}; CvMat u = cvMat(2,2,CV_32F,U);
+	float W[4] = {0.f,0.f,0.f,0.f}; CvMat w = cvMat(2,2,CV_32F,W);
+	float V[4] = {0.f,0.f,0.f,0.f}; CvMat v = cvMat(2,2,CV_32F,V);
 	CvPoint2D32f mean_a = cvPoint2D32f(0.f,0.f);
 	CvPoint2D32f mean_b = cvPoint2D32f(0.f,0.f);
+	
 	for( i = 0 ; i < count ; i ++) {
 		mean_a.x += a[i].x;
 		mean_a.y += a[i].y;
