@@ -81,9 +81,8 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
 		input_correlation_new[i] = new_points[i];
 
 	for ( k = 0 ; k < criteria.max_iter; k++ ) {
-        float R[4],T[2];
-        CvMat r = cvMat(2,2,CV_32F,R);
-        CvMat t = cvMat(2,1,CV_32F,T);
+		float R[4]; CvMat r = cvMat(2,2,CV_32F,R);
+		float T[2]; CvMat t = cvMat(2,1,CV_32F,T);
 
 		err = 0.;
 		for( i = 0 ; i < nb_point_new ; i++) {
