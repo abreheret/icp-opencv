@@ -64,7 +64,6 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
 	int k,i;
 	float prev_err = (float)9e33;
 	float err;
-	struct kdres *presults;
 	struct kdtree *ptree = kd_create( 2 );
 	CvPoint2D32f * input_correlation_old = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new );
 	CvPoint2D32f * input_correlation_new = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new );
@@ -86,7 +85,7 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
 
 		err = 0.;
 		for( i = 0 ; i < nb_point_new ; i++) {
-			presults = kd_nearestf( (struct kdtree *)ptree, (float*)&input_correlation_new[i]);
+			struct kdres * presults = kd_nearestf( (struct kdtree *)ptree, (float*)&input_correlation_new[i]);
 			kd_res_end( presults );
 			kd_res_itemf( presults, (float*)&input_correlation_old[i] );
 			err += sqrtf( dist_sq( (float*)&input_correlation_old[i], (float*)&input_correlation_new[i], 2 ) );
@@ -96,6 +95,7 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
 					             cvPoint((int)input_correlation_new[i].x,(int)input_correlation_new[i].y),CV_RGB(0,0,255),1,8,0);
 				cvDrawCircle(image,cvPoint((int)input_correlation_old[i].x,(int)input_correlation_old[i].y),3,CV_RGB(255,0,0),1,8,0);
 			}
+			kd_res_free( presults );
 		}
 		getRTMatrixSVD(&input_correlation_new[0],&input_correlation_old[0],nb_point_new,&r,&t);
 		for(i = 0; i < nb_point_new ; i++ ) {
@@ -110,7 +110,7 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
 		else prev_err = err;
     }
     getRTMatrixSVD(&new_points[0],&input_correlation_new[0],nb_point_new,r_final,t_final);
-	kd_res_free( presults );
+	
 	kd_free( ptree );
 	free(input_correlation_old);
 	free(input_correlation_new);
