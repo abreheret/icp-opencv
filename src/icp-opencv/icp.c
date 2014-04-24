@@ -40,6 +40,14 @@ static void getRTMatrixSVD( const CvPoint2D32f* a, const CvPoint2D32f* b, int co
 		R[1] = V[0]*U[2] + V[1]*U[3];
 		R[2] = V[2]*U[0] + V[3]*U[1];
 		R[3] = V[2]*U[2] + V[3]*U[3];
+		
+		// special reflection case
+		if ( cvDet(r) < 0 ) {
+			R[0] = V[0]*U[0] - V[1]*U[1];
+			R[1] = V[0]*U[2] - V[1]*U[3];
+			R[2] = V[2]*U[0] - V[3]*U[1];
+			R[3] = V[2]*U[2] - V[3]*U[3];
+		}
 
 		// T = -R*meanA+meanB
 		T[0] = -R[0]*mean_a.x - R[1]*mean_a.y + mean_b.x;
