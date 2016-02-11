@@ -9,7 +9,7 @@ if(WIN32)
 			  "C:/OpenCV/opencv-2.4.9/build" # PC Amaury Mines
 			  )
 	if( ${OpenCV_DIR} STREQUAL "OpenCV_DIR-NOTFOUND" ) 
-		message( FATAL_ERROR "FATAL_ERROR : OpenCV is not found, Please insert your OpenCV Path in pl_utils.cmake")
+		message( FATAL_ERROR "FATAL_ERROR : OpenCV is not found, Please insert your OpenCV Path in CMakeLists.txt")
 	else ()
 		message(STATUS "Your OpenCV_DIR is ${OpenCV_DIR}")
 	endif()
