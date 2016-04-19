@@ -1,7 +1,7 @@
 icp-opencv 
 ==========
 
-A simple example of icp (Iterative Closest Point) with [opencv](http://opencv.org/) and [kdtree](https://code.google.com/p/kdtree/).
+A simple example of icp (Iterative Closest Point) with [opencv](http://opencv.org/) and [kdtree](https://github.com/jtsiomb/kdtree).
 
 ![](image.png)
 
