@@ -70,7 +70,7 @@ float icp(const CvPoint2D32f* new_points,int nb_point_new,
           CvMat * r_final,CvMat *t_final,
 	      CvTermCriteria criteria,IplImage * image) {
 	int k,i;
-	float prev_err = (float)9e33;
+	float prev_err = FLT_MAX;
 	float err;
 	struct kdtree *ptree = kd_create( 2 );
 	CvPoint2D32f * input_correlation_old = (CvPoint2D32f *)malloc(sizeof(CvPoint2D32f)*nb_point_new );
