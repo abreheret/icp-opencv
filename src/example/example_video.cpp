@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "icp.h"
 #include <highgui.h>
 
