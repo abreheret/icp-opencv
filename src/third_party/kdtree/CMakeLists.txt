@@ -1,7 +1,7 @@
 
 include_directories( . )
 
-file( GLOB kdtree_src *.c ) 
+file( GLOB kdtree_src *.cpp ) 
 file( GLOB kdtree_hdr *.h ) 
 add_library( kdtree STATIC ${kdtree_hdr} ${kdtree_src} )
 

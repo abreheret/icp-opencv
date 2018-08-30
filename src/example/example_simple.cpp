@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "icp.h"
-#include <highgui.h>
+#include "opencv2/opencv.hpp"													//eyedea - opencv lib.
+#include "use_opencv_lib.h"
+
 
 int main(int,char **) {
 	int i, num_pts ;
