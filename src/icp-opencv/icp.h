@@ -1,7 +1,8 @@
 #ifndef __icp_h__
 #define __icp_h__
 
-#include <cxcore.h>
+#include "opencv2/opencv.hpp"													//eyedea - opencv lib.
+#include "use_opencv_lib.h"
 #include "kdtree.h"
 
 
